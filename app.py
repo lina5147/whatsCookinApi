@@ -4,7 +4,7 @@ import os
 from dotenv import load_dotenv, find_dotenv
 
 load_dotenv(find_dotenv())
-SECRET_KEY = os.environ.get("API_KEY")
+API_KEY = os.environ.get("API_KEY")
 
 # from flask_restful import Resource, Api
 
@@ -53,17 +53,22 @@ app = Flask(__name__)
 def get_recipes():
     ingredients = request.args.get('ingredients')
     payload = {
-        "apiKey": SECRET_KEY,
+        "apiKey": API_KEY,
         "ingredients": ingredients,
         "limitLicense": True,
         "ranking": 2,
         "ignorePantry": True
     }
-    # r = requests.get('https://api.spoonacular.com/recipes/findByIngredients?apiKey=' + SECRET_KEY + '&ingredients=' + ingredients).json()
     r = requests.get('https://api.spoonacular.com/recipes/findByIngredients', params=payload).json()
     new_json = []
 
     for recipe in r:
+        # check for recipe instructions
+        intructions_response = requests.get(f'https://api.spoonacular.com/recipes/{recipe["id"]}/analyzedInstructions?apiKey=' + API_KEY).json()
+        # skip recipe if it doesn't have instructions
+        if intructions_response == []:
+            continue
+
         new_format = {}
 
         new_format["id"] = recipe["id"]
@@ -75,15 +80,22 @@ def get_recipes():
             missed_ingredients.append(ingredient["name"])
 
         new_format["additionalIngredients"] = missed_ingredients
+
+        # intructions_response = requests.get(f'https://api.spoonacular.com/recipes/{recipe_id}/analyzedInstructions?apiKey=' + SECRET_KEY).json()
+        
+
         new_json.append(new_format)
+
+    # my_list = [x for x in my_list if x.attribute == value]
+
 
     return jsonify(new_json)
 
 
 @app.route('/search/<int:recipe_id>', methods=['GET'])
 def get_details(recipe_id):
-    ingredients_response = requests.get(f'https://api.spoonacular.com/recipes/{recipe_id}/ingredientWidget.json?apiKey=' + SECRET_KEY).json()
-    intructions_response = requests.get(f'https://api.spoonacular.com/recipes/{recipe_id}/analyzedInstructions?apiKey=' + SECRET_KEY).json()
+    ingredients_response = requests.get(f'https://api.spoonacular.com/recipes/{recipe_id}/ingredientWidget.json?apiKey=' + API_KEY).json()
+    intructions_response = requests.get(f'https://api.spoonacular.com/recipes/{recipe_id}/analyzedInstructions?apiKey=' + API_KEY).json()
 
     
    
