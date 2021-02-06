@@ -52,7 +52,15 @@ app = Flask(__name__)
 @app.route('/search', methods=['GET'])
 def get_recipes():
     ingredients = request.args.get('ingredients')
-    r = requests.get('https://api.spoonacular.com/recipes/findByIngredients?apiKey=' + SECRET_KEY + '&ingredients=' + ingredients).json()
+    payload = {
+        "apiKey": SECRET_KEY,
+        "ingredients": ingredients,
+        "limitLicense": True,
+        "ranking": 2,
+        "ignorePantry": True
+    }
+    # r = requests.get('https://api.spoonacular.com/recipes/findByIngredients?apiKey=' + SECRET_KEY + '&ingredients=' + ingredients).json()
+    r = requests.get('https://api.spoonacular.com/recipes/findByIngredients', params=payload).json()
     new_json = []
 
     for recipe in r:
@@ -78,7 +86,7 @@ def get_details(recipe_id):
     intructions_response = requests.get(f'https://api.spoonacular.com/recipes/{recipe_id}/analyzedInstructions?apiKey=' + SECRET_KEY).json()
 
     
-    recipe_details = {}
+   
     ingredients = []
     for i in ingredients_response["ingredients"]:
         ingredient = str(i["amount"]["us"]["value"]) + " " + i["amount"]["us"]["unit"] + " " + i["name"] 
@@ -88,11 +96,13 @@ def get_details(recipe_id):
     for i in intructions_response[0]["steps"]:
         instructions.append(i["step"])
 
-
+    new_json = []
+    recipe_details = {}
     recipe_details["ingredients"] = ingredients
     recipe_details["instructions"] = instructions
+    new_json.append(recipe_details)
     
-    return jsonify(recipe_details)
+    return jsonify(new_json)
 
 if __name__ == '__main__':
     app.run(debug=True)
