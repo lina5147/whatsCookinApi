@@ -7,48 +7,8 @@ import math
 
 load_dotenv(find_dotenv())
 API_KEY = os.environ.get("API_KEY")
-
-# from flask_restful import Resource, Api
-
 app = Flask(__name__)
-# api = Api(app)
 
-# class RecipesSearch(Resource):
-#   def get(self, ingredients):
-#     return search_recipes
-
-# class HelloWorld(Resource):
-#     def get(self):
-#         return {'hello': 'world'}
-
-# api.add_resource(HelloWorld, '/')
-
-# api.add_resource(RecipesSearch, '/search/<string:ingredients>')
-
-# tasks = [
-#     {
-#         'id': 1,
-#         'title': u'Buy groceries',
-#         'description': u'Milk, Cheese, Pizza, Fruit, Tylenol', 
-#         'done': False
-#     },
-#     {
-#         'id': 2,
-#         'title': u'Learn Python',
-#         'description': u'Need to find a good Python tutorial on the web', 
-#         'done': False
-#     }
-# ]
-# @app.route('/todo/api/tasks', methods=['GET'])
-# def get_tasks():
-#     return jsonify(tasks)
-
-# @app.route('/todo/api/tasks/<int:task_id>', methods=['GET'])
-# def get_task(task_id):
-#     task = [task for task in tasks if task['id'] == task_id]
-#     if len(task) == 0:
-#         abort(404)
-#     return jsonify(task[0])
 
 sample_recipes = [
     {
@@ -222,7 +182,6 @@ def get_details(recipe_id):
     for i in ingredients_response["ingredients"]:
         measurement = fraction(i["amount"]["us"]["value"])
         ingredient = measurement + i["amount"]["us"]["unit"] + " " + i["name"]
-        # ingredient = str(i["amount"]["us"]["value"]) + " " + i["amount"]["us"]["unit"] + " " + i["name"] 
         ingredients.append(ingredient)
 
     instructions = []
