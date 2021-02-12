@@ -117,41 +117,36 @@ def fraction(num):
 @app.route('/search', methods=['GET'])
 def get_recipes():
     ingredients = request.args.get('ingredients')
-    # payload = {
-    #     "apiKey": API_KEY,
-    #     "ingredients": ingredients,
-    #     "limitLicense": True,
-    #     "ranking": 2,
-    #     "ignorePantry": True,
-    #     "number": 20
-    # }
-    # r = requests.get('https://api.spoonacular.com/recipes/findByIngredients', params=payload).json()
+    payload = {
+        "apiKey": API_KEY,
+        "ingredients": ingredients,
+        "limitLicense": True,
+        "ranking": 2,
+        "ignorePantry": True,
+        "number": 20
+    }
+    r = requests.get('https://api.spoonacular.com/recipes/findByIngredients', params=payload).json()
 
-    # new_json = []
+    new_json = []
 
-    # for recipe in r:
-                    # # check for recipe instructions
-                    # intructions_response = requests.get(f'https://api.spoonacular.com/recipes/{recipe["id"]}/analyzedInstructions?apiKey=' + API_KEY).json()
-                    # # skip recipe if it doesn't have instructions
-                    # if intructions_response == []:
-                    #     continue
+    if r != []:
+        for recipe in r:
+            new_format = {}
 
-        # new_format = {}
+            new_format["id"] = recipe["id"]
+            new_format["title"] = recipe["title"]
+            new_format["image"] = recipe["image"]
 
-        # new_format["id"] = recipe["id"]
-        # new_format["title"] = recipe["title"]
-        # new_format["image"] = recipe["image"]
+            missed_ingredients = []
+            for ingredient in recipe["missedIngredients"]:
+                missed_ingredients.append(ingredient["name"])
 
-        # missed_ingredients = []
-        # for ingredient in recipe["missedIngredients"]:
-        #     missed_ingredients.append(ingredient["name"])
+            new_format["additionalIngredients"] = missed_ingredients
 
-        # new_format["additionalIngredients"] = missed_ingredients
+            new_json.append(new_format)
 
-        # new_json.append(new_format)
-
-    # return jsonify(new_json)
-    return jsonify(sample_recipes)
+    return jsonify(new_json)
+    # return jsonify(sample_recipes)
 
 
 sample_details = [
@@ -174,30 +169,30 @@ sample_details = [
 
 @app.route('/search/<int:recipe_id>', methods=['GET'])
 def get_details(recipe_id):
-    # ingredients_response = requests.get(f'https://api.spoonacular.com/recipes/{recipe_id}/ingredientWidget.json?apiKey=' + API_KEY).json()
-    # instructions_response = requests.get(f'https://api.spoonacular.com/recipes/{recipe_id}/analyzedInstructions?apiKey=' + API_KEY).json()
+    ingredients_response = requests.get(f'https://api.spoonacular.com/recipes/{recipe_id}/ingredientWidget.json?apiKey=' + API_KEY).json()
+    instructions_response = requests.get(f'https://api.spoonacular.com/recipes/{recipe_id}/analyzedInstructions?apiKey=' + API_KEY).json()
 
     
    
-    # ingredients = []
-    # for i in ingredients_response["ingredients"]:
-    #     measurement = fraction(i["amount"]["us"]["value"])
-    #     ingredient = measurement + i["amount"]["us"]["unit"] + " " + i["name"]
-    #     ingredients.append(ingredient)
+    ingredients = []
+    for i in ingredients_response["ingredients"]:
+        measurement = fraction(i["amount"]["us"]["value"])
+        ingredient = measurement + i["amount"]["us"]["unit"] + " " + i["name"]
+        ingredients.append(ingredient)
 
-    # instructions = []
-    # if instructions_response != []:
-    #     for i in instructions_response[0]["steps"]:
-    #         instructions.append(i["step"])
+    instructions = []
+    if instructions_response != []:
+        for i in instructions_response[0]["steps"]:
+            instructions.append(i["step"])
 
-    # new_json = []
-    # recipe_details = {}
-    # recipe_details["ingredients"] = ingredients
-    # recipe_details["instructions"] = instructions
-    # new_json.append(recipe_details)
+    new_json = []
+    recipe_details = {}
+    recipe_details["ingredients"] = ingredients
+    recipe_details["instructions"] = instructions
+    new_json.append(recipe_details)
     
-    return jsonify(sample_details)
-    # return jsonify(new_json)
+    # return jsonify(sample_details)
+    return jsonify(new_json)
 
 if __name__ == '__main__':
     app.run(debug=True)
