@@ -25,10 +25,12 @@ The API is hosted at https://whatscookin-api.herokuapp.com and is used with my I
 
 ### Recipes
 
+- Retrieve a list of recipes based on ingredients
+
 ```css
 GET /search
 ```
-Required Params
-- ingredients(string of ingredients separated by commas)
+  - Required Params
+    - ingredients(string of ingredients separated by commas)
 
 
