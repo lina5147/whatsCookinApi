@@ -1,6 +1,6 @@
 # Whats Cookin' Api
 
-The API is hosted at https://whatscookin-api.herokuapp.com. 
+The API is hosted at https://whatscookin-api.herokuapp.com and is used with my IOS project, [What's Cookin'](https://github.com/lina5147/whatsCookinApp). 
 
 ## Setup
 
@@ -24,3 +24,11 @@ The API is hosted at https://whatscookin-api.herokuapp.com.
 ## Functionality
 
 ### Recipes
+
+```css
+GET /search
+```
+Required Params
+- ingredients(string of ingredients separated by commas)
+
+
