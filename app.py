@@ -2,8 +2,6 @@ from flask import Flask, jsonify, abort, request
 import requests
 import os
 from dotenv import load_dotenv, find_dotenv
-from fractions import Fraction
-import math
 
 load_dotenv(find_dotenv())
 API_KEY = os.environ.get("API_KEY")
