@@ -7,6 +7,9 @@ load_dotenv(find_dotenv())
 API_KEY = os.environ.get("API_KEY")
 app = Flask(__name__)
 
+@app.route('/')
+def index():
+    return "Welcome to What's Cookin' Api!"
 
 @app.route('/search', methods=['GET'])
 def get_recipes():
