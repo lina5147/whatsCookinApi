@@ -18,7 +18,7 @@ The API is hosted at https://whatscookin-api.herokuapp.com and is used with my I
   2. Python 3 comes bundled with the venv module so you can simply `cd` into the project folder and run 
   `$ python3 -m venv venv`
 - Activate the environment with `$ . venv/bin/activate`
-- To install all of the dependencies, run `$pip3 install -r requirements.txt
+- To install all of the dependencies, run `$pip3 install -r requirements.txt`
 - Create a `.env` file and add the Spoonacular Api key as `API_KEY`
 
 ## Functionality
