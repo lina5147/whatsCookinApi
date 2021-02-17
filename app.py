@@ -20,7 +20,7 @@ def get_recipes():
         "limitLicense": True,
         "ranking": 1,
         "ignorePantry": True,
-        "number": 40
+        "number": 60
     }
     r = requests.get('https://api.spoonacular.com/recipes/findByIngredients', params=payload).json()
 
